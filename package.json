@@ -9,7 +9,7 @@
   },
   "author": "Konrad Hosemann",
   "license": "Apache-2.0",
-  "repository": "https://github.com/konz/cosmopusher/cosmoweb",
+  "repository": "https://github.com/konz/cosmoweb.git",
   "devDependencies": {
     "babel-minify-webpack-plugin": "^0.2.0",
     "copy-webpack-plugin": "^4.3.1",
