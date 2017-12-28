@@ -1,0 +1,60 @@
+Description: "Web site hosting and access to IoT topic from clients"
+Resources:
+  identityPool:
+    Type: "AWS::Cognito::IdentityPool"
+    Properties:
+      IdentityPoolName: cosmoweb
+      AllowUnauthenticatedIdentities: true
+  identityPoolRoleAttachment:
+    Type: "AWS::Cognito::IdentityPoolRoleAttachment"
+    Properties:
+      IdentityPoolId: !Ref identityPool
+      Roles:
+        unauthenticated: !GetAtt [accessRole, Arn]
+  accessRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Federated: "cognito-identity.amazonaws.com"
+            Action: "sts:AssumeRoleWithWebIdentity"
+            Condition:
+              StringEquals:
+                "cognito-identity.amazonaws.com:aud": !Ref identityPool
+              "ForAnyValue:StringLike":
+                "cognito-identity.amazonaws.com:amr": "unauthenticated"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSIoTDataAccess"
+      RoleName: cosmoweb
+  websiteBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      WebsiteConfiguration:
+        IndexDocument: "index.html"
+        ErrorDocument: "404.html"
+  websiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref websiteBucket
+      PolicyDocument:
+        Statement:
+          -
+            Effect: Allow
+            Principal: "*"
+            Action: ["s3:GetObject"]
+            Resource: !Sub
+              - "arn:aws:s3:::${bucketName}/*"
+              - { bucketName: !Ref websiteBucket }
+Outputs:
+  bucketName:
+    Description: "Name of the bucket hosting the website"
+    Value: !Ref websiteBucket
+  websiteUrl:
+    Description: "Cosmoweb URL"
+    Value: !GetAtt [websiteBucket, WebsiteURL]
+  cognitoIdentityPoolId:
+    Description: "Id of the Cognito identity pool. Needs to be configured in the webapp"
+    Value: !Ref identityPool

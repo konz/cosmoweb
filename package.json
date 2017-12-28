@@ -1,0 +1,22 @@
+{
+  "name": "cosmoweb",
+  "version": "1.0.0",
+  "description": "Pulse oxymetry live monitoring via AWS IoT",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "Konrad Hosemann",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/konz/cosmopusher/cosmoweb",
+  "devDependencies": {
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "copy-webpack-plugin": "^4.3.1",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "aws-iot-device-sdk": "^2.2.0",
+    "aws-sdk": "^2.175.0"
+  }
+}
