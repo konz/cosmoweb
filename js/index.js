@@ -1,16 +1,16 @@
 var awsIot = require('aws-iot-device-sdk');
 var aws = require('aws-sdk');
-var noSleep = require('nosleep.js');
 require("./plugins.js");
-
-new noSleep().enable();
 
 aws.config.region = REGION;
 aws.config.credentials = new aws.CognitoIdentityCredentials({
     IdentityPoolId: IDENTITY_POOL_ID
 });
 
-var updateCredentials = () => {
+var updateCredentials = (error) => {
+  if (error) {
+    console.log(error);
+  }
   console.log("got credentials, valid until: ", aws.config.credentials.expireTime);
   iot.connect(aws.config.credentials.accessKeyId,
               aws.config.credentials.secretAccessKey,
