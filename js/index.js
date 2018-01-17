@@ -49,7 +49,6 @@ var onConnect = () => {
 };
 
 var onMessage = (topic, message) => {
-    console.log(message.toString());
     data = JSON.parse(message.toString());
     time = new Date(Date.parse(data.time));
     $('#time').text(time.toLocaleTimeString() + " " + time.toLocaleDateString());
