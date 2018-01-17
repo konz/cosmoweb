@@ -7,12 +7,20 @@ aws.config.credentials = new aws.CognitoIdentityCredentials({
     IdentityPoolId: IDENTITY_POOL_ID
 });
 
-aws.config.credentials.get(() => {
-    console.log("got credentials, valid until: ", aws.config.credentials.expireTime);
-    iot.connect(aws.config.credentials.accessKeyId,
-                aws.config.credentials.secretAccessKey,
-                aws.config.credentials.sessionToken)
-});
+var updateCredentials = () => {
+  console.log("got credentials, valid until: ", aws.config.credentials.expireTime);
+  iot.connect(aws.config.credentials.accessKeyId,
+              aws.config.credentials.secretAccessKey,
+              aws.config.credentials.sessionToken);
+
+  var nextUpdate = aws.config.credentials.expireTime - Date.now() - (1000 * 60 * 5);
+  console.log("next credentials refresh: ", nextUpdate);
+  window.setTimeout(() => {
+    aws.config.credentials.refresh(updateCredentials);
+  }, nextUpdate);
+}
+
+aws.config.credentials.get(updateCredentials);
 
 var iot = {
     connect: (accessKey, secretKey, sessionToken) => {
