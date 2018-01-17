@@ -1,6 +1,9 @@
 var awsIot = require('aws-iot-device-sdk');
 var aws = require('aws-sdk');
-require("./plugins.js")
+var noSleep = require('nosleep.js');
+require("./plugins.js");
+
+new noSleep().enable();
 
 aws.config.region = REGION;
 aws.config.credentials = new aws.CognitoIdentityCredentials({
