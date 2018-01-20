@@ -7,13 +7,13 @@ var switchedOff = document.querySelector("#light-switched-off");
 var switchedOn = document.querySelector("#light-switched-on");
 
 var makeVisible = (element) => {
-  element.classList.remove('not-visible');
+  element.classList.remove('invisible');
   element.classList.add('visible');
 };
 
 var makeInvisible = (element) => {
   element.classList.remove('visible');
-  element.classList.add('not-visible');
+  element.classList.add('invisible');
 };
 
 document.querySelector("#light-switch").addEventListener('click', () => {
