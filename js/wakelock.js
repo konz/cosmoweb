@@ -16,7 +16,7 @@ var makeInvisible = (element) => {
   element.classList.add('not-visible');
 };
 
-document.querySelector("#light-switch").addEventListener('click', function() {
+document.querySelector("#light-switch").addEventListener('click', () => {
   if (!wakeLockEnabled) {
     noSleep.enable();
     wakeLockEnabled = true;
