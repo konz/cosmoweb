@@ -6,24 +6,28 @@ var wakeLockEnabled = false;
 var switchedOff = document.querySelector("#light-switched-off");
 var switchedOn = document.querySelector("#light-switched-on");
 
+var makeVisible = (element) => {
+  element.classList.remove('not-visible');
+  element.classList.add('visible');
+};
+
+var makeInvisible = (element) => {
+  element.classList.remove('visible');
+  element.classList.add('not-visible');
+};
+
 document.querySelector("#light-switch").addEventListener('click', function() {
   if (!wakeLockEnabled) {
     noSleep.enable();
     wakeLockEnabled = true;
 
-    switchedOn.classList.remove('not-visible');
-    switchedOn.classList.add('visible');
-
-    switchedOff.classList.remove('visible');
-    switchedOff.classList.add('not-visible');
+    makeVisible(switchedOn);
+    makeInvisible(switchedOff);
   } else {
     noSleep.disable();
     wakeLockEnabled = false;
 
-    switchedOff.classList.remove('not-visible');
-    switchedOff.classList.add('visible');
-
-    switchedOn.classList.remove('visible');
-    switchedOn.classList.add('not-visible');
+    makeVisible(switchedOff);
+    makeInvisible(switchedOn);
   }
 }, false);
