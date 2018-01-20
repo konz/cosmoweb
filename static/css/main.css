@@ -140,10 +140,29 @@ header {
 #meta-box {
     width: 100%;
     text-align: center;
-    position: fixed;
     bottom: 10px;
+    position: fixed;
+}
+.light-switch {
+    font-size: 3em;
+    bottom: 20px;
+    right: 20px;
+    position: fixed;
+}
+#light-switched-off {
+  z-index: 0
+}
+#light-switched-on {
+  z-index: 1
 }
 
+.visible {
+  visibility: visible;
+}
+
+.not-visible {
+  visibility: hidden;
+}
 
 /* ==========================================================================
    Helper classes

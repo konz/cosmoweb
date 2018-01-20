@@ -1,5 +1,6 @@
 var awsIot = require('aws-iot-device-sdk');
 var aws = require('aws-sdk');
+require('./wakelock.js');
 require("./plugins.js");
 
 aws.config.region = REGION;
