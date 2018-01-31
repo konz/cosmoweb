@@ -7,11 +7,6 @@ aws.config.credentials = new aws.CognitoIdentityCredentials({
     IdentityPoolId: IDENTITY_POOL_ID
 });
 
-aws.config.credentials.get(updateCredentials);
-$(document).wake(() => {
-  aws.config.credentials.refresh(updateCredentials);
-});
-
 var updateCredentials = (error) => {
   if (error) {
     console.log(error);
@@ -27,6 +22,11 @@ var updateCredentials = (error) => {
     aws.config.credentials.refresh(updateCredentials);
   }, nextUpdate);
 }
+
+aws.config.credentials.get(updateCredentials);
+$(document).wake(() => {
+  aws.config.credentials.refresh(updateCredentials);
+});
 
 var iot = {
     connect: (accessKey, secretKey, sessionToken) => {
