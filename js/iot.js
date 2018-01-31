@@ -1,9 +1,15 @@
 var awsIot = require('aws-iot-device-sdk');
 var aws = require('aws-sdk');
+require('./wake.js');
 
 aws.config.region = REGION;
 aws.config.credentials = new aws.CognitoIdentityCredentials({
     IdentityPoolId: IDENTITY_POOL_ID
+});
+
+aws.config.credentials.get(updateCredentials);
+$(document).wake(() => {
+  aws.config.credentials.refresh(updateCredentials);
 });
 
 var updateCredentials = (error) => {
@@ -21,8 +27,6 @@ var updateCredentials = (error) => {
     aws.config.credentials.refresh(updateCredentials);
   }, nextUpdate);
 }
-
-aws.config.credentials.get(updateCredentials);
 
 var iot = {
     connect: (accessKey, secretKey, sessionToken) => {
