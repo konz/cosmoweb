@@ -1,11 +1,8 @@
 var awsIot = require('aws-iot-device-sdk');
-var aws = require('aws-sdk');
+var aws = require('aws-sdk/global');
 require('./wake.js');
 
-aws.config.region = REGION;
-aws.config.credentials = new aws.CognitoIdentityCredentials({
-    IdentityPoolId: IDENTITY_POOL_ID
-});
+var credentials = new aws.CognitoIdentityCredentials({IdentityPoolId: IDENTITY_POOL_ID}, {region: REGION});
 
 var client = undefined;
 
@@ -14,15 +11,15 @@ var updateCredentials = (error) => {
     console.log(error);
     return;
   }
-  console.log("got credentials, valid until: ", aws.config.credentials.expireTime);
+  console.log("got credentials, valid until: ", credentials.expireTime);
 
   if (!client) {
       client = awsIot.device({
           region: REGION,
           protocol: 'wss',
-          accessKeyId: aws.config.credentials.accessKeyId,
-          secretKey: aws.config.credentials.secretAccessKey,
-          sessionToken: aws.config.credentials.sessionToken,
+          accessKeyId: credentials.accessKeyId,
+          secretKey: credentials.secretAccessKey,
+          sessionToken: credentials.sessionToken,
           port: 443,
           host: IOT_ENDPOINT
       });
@@ -32,21 +29,21 @@ var updateCredentials = (error) => {
       client.on('close', onClose);
   } else {
       client.updateWebSocketCredentials(
-          aws.config.credentials.accessKeyId,
-          aws.config.credentials.secretAccessKey,
-          aws.config.credentials.sessionToken);
+          credentials.accessKeyId,
+          credentials.secretAccessKey,
+          credentials.sessionToken);
   }
 
-  var nextUpdate = aws.config.credentials.expireTime - Date.now() - (1000 * 60 * 5);
+  var nextUpdate = credentials.expireTime - Date.now() - (1000 * 60 * 5);
   console.log("next credentials refresh: ", new Date(Date.now() + nextUpdate));
   window.setTimeout(() => {
-    aws.config.credentials.refresh(updateCredentials);
+    credentials.refresh(updateCredentials);
   }, nextUpdate);
 };
 
-aws.config.credentials.get(updateCredentials);
+credentials.get(updateCredentials);
 $(document).wake(() => {
-  aws.config.credentials.refresh(updateCredentials);
+  credentials.refresh(updateCredentials);
 });
 
 var onConnect = () => {
