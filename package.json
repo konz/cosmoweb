@@ -14,7 +14,7 @@
   "devDependencies": {
     "copy-webpack-plugin": "^5.1.1",
     "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
     "aws-iot-device-sdk": "^2.2.3",
